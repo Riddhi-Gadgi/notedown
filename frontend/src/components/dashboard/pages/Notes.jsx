@@ -9,6 +9,8 @@ import {
   Calendar,
   X,
   Palette,
+  Folder,
+  ChevronDown,
 } from "lucide-react";
 import { useNotes } from "./NotesContext";
 
@@ -87,6 +89,7 @@ const Notes = () => {
   });
   const [expandedNoteId, setExpandedNoteId] = useState(null);
   const [pageColor, setPageColor] = useState("bg-gray-50");
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
 
   useEffect(() => {
     let filtered = searchQuery ? searchNotes(searchQuery) : notes;
@@ -110,12 +113,15 @@ const Notes = () => {
       title: "",
       content: "",
       category: "personal",
+      tags: [],
       isPinned: false,
       color: colorOptions[0].color,
       textColor: colorOptions[0].text,
       borderColor: colorOptions[0].border,
     };
     addNote(newNote);
+    // Open the new note immediately
+    setExpandedNoteId(Date.now().toString());
   };
 
   const handleNoteUpdate = (noteId, field, value) => {
@@ -152,6 +158,17 @@ const Notes = () => {
   const expandedNote = expandedNoteId
     ? notes.find((note) => note.id === expandedNoteId)
     : null;
+
+  // Get category for a note
+  const getCategory = (note) => {
+    return (
+      categories.find((cat) => cat.id === note.category) || {
+        id: "personal",
+        name: "Personal",
+        color: "bg-blue-500",
+      }
+    );
+  };
 
   return (
     <div
@@ -265,6 +282,60 @@ const Notes = () => {
                   >
                     <Trash2 className="w-5 h-5" />
                   </motion.button>
+
+                  {/* Category Selector */}
+                  <div className="relative">
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowCategoryDropdown(!showCategoryDropdown);
+                      }}
+                      className={`flex items-center gap-1 px-2 py-1.5 rounded-lg ${expandedNote.textColor} hover:bg-opacity-20 transition-all duration-200`}
+                    >
+                      <div
+                        className={`w-3 h-3 rounded-full ${
+                          getCategory(expandedNote).color
+                        }`}
+                      />
+                      <span className="text-sm">
+                        {getCategory(expandedNote).name}
+                      </span>
+                      <ChevronDown className="w-4 h-4" />
+                    </motion.button>
+
+                    {showCategoryDropdown && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-xl z-50 w-48 overflow-hidden border border-gray-200"
+                      >
+                        {categories.map((category) => (
+                          <button
+                            key={category.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleNoteUpdate(
+                                expandedNote.id,
+                                "category",
+                                category.id
+                              );
+                              setShowCategoryDropdown(false);
+                            }}
+                            className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100 transition-colors text-left"
+                          >
+                            <div
+                              className={`w-3 h-3 rounded-full ${category.color}`}
+                            />
+                            <span className="text-gray-700">
+                              {category.name}
+                            </span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </div>
                 </div>
 
                 <motion.button
@@ -443,6 +514,8 @@ const Notes = () => {
           <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
             <AnimatePresence>
               {filteredNotes.map((note) => {
+                const noteCategory = getCategory(note);
+
                 return (
                   <motion.div
                     key={note.id}
@@ -498,6 +571,14 @@ const Notes = () => {
                       } transition-colors duration-300`}
                     >
                       <div className="flex items-center gap-1 opacity-80">
+                        <div
+                          className={`w-2 h-2 rounded-full ${noteCategory.color}`}
+                        />
+                        <span className="truncate max-w-[80px]">
+                          {noteCategory.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {new Date(note.updatedAt).toLocaleDateString()}
                       </div>

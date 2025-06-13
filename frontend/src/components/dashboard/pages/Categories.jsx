@@ -4,8 +4,8 @@ import {
   Plus, 
   Edit3, 
   Trash2, 
-  X,
-  BookOpen
+  FolderOpen,
+  X
 } from 'lucide-react';
 import { useNotes } from './NotesContext';
 
@@ -15,66 +15,20 @@ const Categories = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
-    color: 'default'
+    color: 'bg-blue-500'
   });
 
   const colorOptions = [
-    {
-      value: "default",
-      label: "Default",
-      color: "bg-white",
-      text: "text-gray-800",
-      border: "border-gray-200",
-    },
-    {
-      value: "sky",
-      label: "Sky",
-      color: "bg-sky-500",
-      text: "text-white",
-      border: "border-sky-600",
-    },
-    {
-      value: "amber",
-      label: "Amber",
-      color: "bg-amber-400",
-      text: "text-gray-900",
-      border: "border-amber-500",
-    },
-    {
-      value: "emerald",
-      label: "Emerald",
-      color: "bg-emerald-500",
-      text: "text-white",
-      border: "border-emerald-600",
-    },
-    {
-      value: "rose",
-      label: "Rose",
-      color: "bg-rose-500",
-      text: "text-white",
-      border: "border-rose-600",
-    },
-    {
-      value: "indigo",
-      label: "Indigo",
-      color: "bg-indigo-600",
-      text: "text-white",
-      border: "border-indigo-700",
-    },
-    {
-      value: "violet",
-      label: "Violet",
-      color: "bg-violet-500",
-      text: "text-white",
-      border: "border-violet-600",
-    },
-    {
-      value: "fuchsia",
-      label: "Fuchsia",
-      color: "bg-fuchsia-500",
-      text: "text-white",
-      border: "border-fuchsia-600",
-    },
+    'bg-blue-500',
+    'bg-green-500',
+    'bg-purple-500',
+    'bg-orange-500',
+    'bg-red-500',
+    'bg-pink-500',
+    'bg-indigo-500',
+    'bg-yellow-500',
+    'bg-teal-500',
+    'bg-gray-500'
   ];
 
   const handleSubmit = (e) => {
@@ -96,7 +50,7 @@ const Categories = () => {
   const resetForm = () => {
     setFormData({
       name: '',
-      color: 'default'
+      color: 'bg-blue-500'
     });
   };
 
@@ -115,11 +69,6 @@ const Categories = () => {
     }
   };
 
-  // Helper to get color object by value
-  const getColorObj = (colorValue) => {
-    return colorOptions.find(opt => opt.value === colorValue) || colorOptions[0];
-  };
-
   return (
     <div className="h-full flex flex-col bg-gray-50">
       {/* Header */}
@@ -127,13 +76,13 @@ const Categories = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Categories</h1>
-            <p className="text-gray-600 mt-1">Organize your notes with custom categories</p>
+            <p className="text-gray-600 mt-1">Organize your notes with colorful categories</p>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsCreating(true)}
-            className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             New Category
@@ -141,75 +90,76 @@ const Categories = () => {
         </div>
       </div>
 
-      {/* Categories Grid - Simplified Card Style */}
+      {/* Categories Grid */}
       <div className="flex-1 overflow-auto p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <AnimatePresence>
-            {categories.map(category => {
-              const colorObj = getColorObj(category.color);
-              return (
-                <motion.div
-                  key={category.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="group relative"
-                >
-                  {/* Simplified card */}
-                  <div className="relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                    {/* Color header */}
-                    <div className={`h-3 ${colorObj.color}`}></div>
-                    
-                    <div className="p-5">
-                      <div className="flex items-start gap-3">
-                        <div className={`w-10 h-10 ${colorObj.color} rounded-lg flex items-center justify-center shadow-md`}>
-                          <BookOpen className={`w-5 h-5 ${colorObj.text}`} />
-                        </div>
-                        
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-lg truncate">{category.name}</h3>
-                          <p className="text-gray-500 text-sm">
-                            {category.noteCount} {category.noteCount === 1 ? 'note' : 'notes'}
-                          </p>
-                        </div>
-                        
-                        {/* Actions */}
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button
-                            onClick={() => handleEdit(category)}
-                            className="p-1.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                            title="Edit category"
-                          >
-                            <Edit3 className="w-4 h-4 text-gray-600" />
-                          </button>
-                          {category.id !== 'personal' && (
-                            <button
-                              onClick={() => handleDelete(category.id)}
-                              className="p-1.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                              title="Delete category"
-                            >
-                              <Trash2 className="w-4 h-4 text-red-500" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+            {categories.map(category => (
+              <motion.div
+                key={category.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                whileHover={{ y: -5 }}
+                className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 group"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`w-14 h-14 ${category.color} rounded-xl flex items-center justify-center shadow-lg`}>
+                    <FolderOpen className="w-7 h-7 text-white" />
                   </div>
-                </motion.div>
-              );
-            })}
+                  
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => handleEdit(category)}
+                      className="p-2 hover:bg-gray-100 rounded-lg"
+                      title="Edit category"
+                    >
+                      <Edit3 className="w-4 h-4 text-gray-500" />
+                    </motion.button>
+                    {category.id !== 'personal' && (
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => handleDelete(category.id)}
+                        className="p-2 hover:bg-gray-100 rounded-lg"
+                        title="Delete category"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-500" />
+                      </motion.button>
+                    )}
+                  </div>
+                </div>
+
+                <h3 className="font-bold text-gray-900 text-lg mb-2">{category.name}</h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  {category.noteCount} {category.noteCount === 1 ? 'note' : 'notes'}
+                </p>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-3 h-3 ${category.color} rounded-full`} />
+                    <span className="text-xs text-gray-500">Category Color</span>
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {category.id === 'personal' ? 'Default' : 'Custom'}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </AnimatePresence>
         </div>
 
         {categories.length === 0 && (
           <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <FolderOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No categories yet</h3>
             <p className="text-gray-500 mb-4">Create your first category to organize your notes</p>
             <button
               onClick={() => setIsCreating(true)}
-              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Create Category
             </button>
@@ -230,11 +180,11 @@ const Categories = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-auto"
+              className="bg-white rounded-xl w-full max-w-md shadow-2xl"
             >
               <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-gray-900">
                     {editingCategory ? 'Edit Category' : 'Create New Category'}
                   </h2>
                   <button
@@ -243,7 +193,7 @@ const Categories = () => {
                       setEditingCategory(null);
                       resetForm();
                     }}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -252,14 +202,14 @@ const Categories = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Category Name
                     </label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                       placeholder="Enter category name..."
                       required
                     />
@@ -267,61 +217,62 @@ const Categories = () => {
 
                   {/* Color */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Color
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Choose Color
                     </label>
-                    <div className="flex flex-wrap gap-2">
-                      {colorOptions.map(option => (
-                        <button
-                          key={option.value}
+                    <div className="grid grid-cols-5 gap-3">
+                      {colorOptions.map(color => (
+                        <motion.button
+                          key={color}
                           type="button"
-                          onClick={() => setFormData(prev => ({ ...prev, color: option.value }))}
-                          className={`w-8 h-8 rounded-lg ${option.color} border-2 ${
-                            formData.color === option.value 
-                              ? 'border-black ring-2 ring-offset-2 ring-blue-500' 
-                              : 'border-gray-300'
-                          } hover:scale-105 transition-transform`}
-                          title={option.label}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => setFormData(prev => ({ ...prev, color }))}
+                          className={`w-12 h-12 rounded-xl ${color} border-3 ${
+                            formData.color === color ? 'border-gray-800 ring-2 ring-gray-300' : 'border-gray-200'
+                          } hover:shadow-lg transition-all duration-200`}
                         />
                       ))}
                     </div>
                   </div>
 
                   {/* Preview */}
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-sm text-gray-600 mb-3">Preview:</p>
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 ${getColorObj(formData.color).color} rounded-lg flex items-center justify-center shadow-md`}>
-                        <BookOpen className={`w-5 h-5 ${getColorObj(formData.color).text}`} />
+                      <div className={`w-10 h-10 ${formData.color} rounded-lg flex items-center justify-center shadow-md`}>
+                        <FolderOpen className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <p className="font-medium truncate max-w-[150px]">
-                          {formData.name || 'Category Name'}
-                        </p>
-                        <p className="text-gray-500 text-sm">0 notes</p>
+                        <span className="font-semibold text-gray-900">{formData.name || 'Category Name'}</span>
+                        <p className="text-xs text-gray-500">0 notes</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Actions */}
                   <div className="flex justify-end gap-3 pt-4">
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       type="button"
                       onClick={() => {
                         setIsCreating(false);
                         setEditingCategory(null);
                         resetForm();
                       }}
-                      className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+                      className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       Cancel
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       type="submit"
-                      className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
                     >
                       {editingCategory ? 'Update Category' : 'Create Category'}
-                    </button>
+                    </motion.button>
                   </div>
                 </form>
               </div>

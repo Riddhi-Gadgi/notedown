@@ -13,34 +13,10 @@ export const useNotes = () => {
 export const NotesProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [categories, setCategories] = useState([
-    {
-      id: "personal",
-      name: "Personal",
-      color: "bg-gray-500",
-      noteCount: 0,
-      template: "default",
-    },
-    {
-      id: "work",
-      name: "Work",
-      color: "bg-gray-600",
-      noteCount: 0,
-      template: "notebook",
-    },
-    {
-      id: "ideas",
-      name: "Ideas",
-      color: "bg-gray-700",
-      noteCount: 0,
-      template: "journal",
-    },
-    {
-      id: "todo",
-      name: "To-Do",
-      color: "bg-gray-800",
-      noteCount: 0,
-      template: "minimal",
-    },
+    { id: "personal", name: "Personal", color: "bg-blue-500", noteCount: 0 },
+    { id: "work", name: "Work", color: "bg-green-500", noteCount: 0 },
+    { id: "ideas", name: "Ideas", color: "bg-purple-500", noteCount: 0 },
+    { id: "todo", name: "To-Do", color: "bg-orange-500", noteCount: 0 },
   ]);
 
   // Load data from localStorage on mount
@@ -81,7 +57,6 @@ export const NotesProvider = ({ children }) => {
     );
   }, [notes]);
 
-  // CRUD Operations (Create, Read, Update, Delete)
   const addNote = (noteData) => {
     const newNote = {
       ...noteData,
@@ -139,7 +114,8 @@ export const NotesProvider = ({ children }) => {
       (note) =>
         note.title.toLowerCase().includes(lowercaseQuery) ||
         note.content.toLowerCase().includes(lowercaseQuery) ||
-        note.tags.some((tag) => tag.toLowerCase().includes(lowercaseQuery))
+        (note.tags &&
+          note.tags.some((tag) => tag.toLowerCase().includes(lowercaseQuery)))
     );
   };
 

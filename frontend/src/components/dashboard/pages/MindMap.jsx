@@ -397,7 +397,7 @@ export default function MindMap() {
             </div>
           )}
 
-        {/* Quick Stats */}
+       
       </div>
     </div>
   );

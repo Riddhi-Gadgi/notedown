@@ -248,19 +248,6 @@ const MapEditor = () => {
 
   return (
     <div className="w-full h-screen bg-gradient-to-br from-blue-50 to-indigo-100 relative">
-      {/* Header */}
-      <motion.div
-        className="absolute top-3 left-1/2 transform -translate-x-1/2 z-10 bg-white/90 backdrop-blur-md rounded-xl shadow-lg border border-gray-200/50 px-4 py-2"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <div className="flex items-center gap-2">
-          <Zap className="w-4 h-4 text-blue-500" />
-          <h1 className="text-sm font-semibold text-gray-800">Mind Map</h1>
-        </div>
-      </motion.div>
-
       {/* Save/Load Controls - Right Corner */}
       <motion.div
         className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-md rounded-xl shadow-lg border border-gray-200/50 p-2"
@@ -273,7 +260,7 @@ const MapEditor = () => {
             onClick={saveMapData}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-1 px-2 py-1 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600 transition-colors"
+            className="flex items-center gap-1 px-2 py-1 bg-gray-700 text-white rounded-lg text-xs hover:bg-black transition-colors"
           >
             <Save className="w-3 h-3" />
             Save

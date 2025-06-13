@@ -17,10 +17,11 @@ import {
   isSameDay,
   isToday,
   isSameMonth,
+  addMonths,
 } from "date-fns";
 
 const Calendar = () => {
-  const { notes } = useNotes();
+  const { notes, categories } = useNotes();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -43,6 +44,12 @@ const Calendar = () => {
     return grouped;
   }, [notes]);
 
+  // Helper to get category color
+  const getCategoryColor = (categoryId) => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    return category ? category.color : "bg-gray-500";
+  };
+
   const getNotesForDate = (date) => {
     const dateKey = format(date, "yyyy-MM-dd");
     return notesByDate[dateKey] || [];
@@ -51,20 +58,12 @@ const Calendar = () => {
   const selectedDateNotes = selectedDate ? getNotesForDate(selectedDate) : [];
 
   const navigateMonth = (direction) => {
-    setCurrentDate((prev) => {
-      const newDate = new Date(prev);
-      if (direction === "prev") {
-        newDate.setMonth(prev.getMonth() - 1);
-      } else {
-        newDate.setMonth(prev.getMonth() + 1);
-      }
-      return newDate;
-    });
+    setCurrentDate((prev) => addMonths(prev, direction === "prev" ? -1 : 1));
   };
 
   const getDayClasses = (date) => {
     const baseClasses =
-      "w-full h-24 p-2 border border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer";
+      "w-full h-24 p-2 border border-gray-200 transition-colors cursor-pointer";
     const isCurrentMonth = isSameMonth(date, currentDate);
     const isTodayDate = isToday(date);
     const isSelected = selectedDate && isSameDay(date, selectedDate);
@@ -77,15 +76,15 @@ const Calendar = () => {
     }
 
     if (isTodayDate) {
-      classes += " bg-black text-white";
+      classes += " bg-black text-white hover:bg-gray-800";
     }
 
     if (isSelected) {
       classes += " bg-gray-800 text-white";
     }
 
-    if (hasNotes) {
-      classes += " border-l-4 border-l-black";
+    if (!isTodayDate && !isSelected) {
+      classes += " hover:bg-gray-50";
     }
 
     return classes;
@@ -120,8 +119,11 @@ const Calendar = () => {
             </div>
 
             <button
-              onClick={() => setCurrentDate(new Date())}
-              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-400 hover:text-black transition-colors"
+              onClick={() => {
+                setCurrentDate(new Date());
+                setSelectedDate(new Date());
+              }}
+              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
             >
               Today
             </button>
@@ -155,11 +157,7 @@ const Calendar = () => {
                     className={getDayClasses(date)}
                   >
                     <div className="flex justify-between items-start mb-1">
-                      <span
-                        className={`text-sm font-medium ${
-                          isToday(date) ? "text-white" : "text-gray-00"
-                        }`}
-                      >
+                      <span className="text-sm font-medium">
                         {format(date, "d")}
                       </span>
                       {dayNotes.length > 0 && (
@@ -169,14 +167,24 @@ const Calendar = () => {
                       )}
                     </div>
 
-                    {/* Show first few notes */}
+                    {/* Show first few notes with category colors */}
                     <div className="space-y-1">
                       {dayNotes.slice(0, 2).map((note) => (
                         <div
                           key={note.id}
-                          className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded truncate"
+                          className={`text-xs text-gray-800 px-2 py-1 rounded truncate flex items-center gap-1 ${
+                            isToday(date) ||
+                            (selectedDate && isSameDay(date, selectedDate))
+                              ? "bg-gray-500"
+                              : "bg-gray-100"
+                          }`}
                         >
-                          {note.title}
+                          <span
+                            className={`w-2 h-2 rounded-full flex-shrink-0 ${getCategoryColor(
+                              note.category
+                            )}`}
+                          ></span>
+                          <span className="truncate">{note.title}</span>
                         </div>
                       ))}
                       {dayNotes.length > 2 && (
@@ -222,9 +230,16 @@ const Calendar = () => {
                     className="bg-gray-50 rounded-lg p-3 border border-gray-200"
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-medium text-gray-900 text-sm">
-                        {note.title}
-                      </h4>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`w-3 h-3 rounded-full flex-shrink-0 ${getCategoryColor(
+                            note.category
+                          )}`}
+                        ></span>
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          {note.title}
+                        </h4>
+                      </div>
                       <div className="flex items-center gap-1 text-xs text-gray-500">
                         <Clock className="w-3 h-3" />
                         {format(note.createdAt, "HH:mm")}
@@ -235,7 +250,6 @@ const Calendar = () => {
                       {note.content}
                     </p>
 
-                    {/* FIXED: Check if tags exists before accessing length */}
                     {note.tags && note.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {note.tags.slice(0, 3).map((tag) => (
