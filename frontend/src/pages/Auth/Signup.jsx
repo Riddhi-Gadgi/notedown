@@ -26,7 +26,7 @@ const Signup = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Join{" "}
             <span className="bg-gradient-to-r from-rose-500 to-red-600 bg-clip-text text-transparent">
-              NoteDown
+              Note Down
             </span>
           </h1>
           <p className="text-gray-600">Create your free account</p>

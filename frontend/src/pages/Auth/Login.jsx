@@ -10,7 +10,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simple navigation without authentication
+
     navigate("/dashboard/notes");
   };
 
@@ -23,7 +23,7 @@ const Login = () => {
       >
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back to <span className="bg-gradient-to-r from-indigo-500 to-violet-600 bg-clip-text text-transparent">NoteDown</span>
+            Welcome back to <span className="bg-gradient-to-r from-indigo-500 to-violet-600 bg-clip-text text-transparent">Note Down</span>
           </h1>
           <p className="text-gray-600">Sign in to access your notes</p>
         </div>

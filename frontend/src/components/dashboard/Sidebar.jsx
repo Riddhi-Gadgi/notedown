@@ -46,7 +46,7 @@ const Sidebar = () => {
               <span>
                 <img
                   src="../src/assets/note-down-logo.svg"
-                  width="27px"
+                  width="41px"
                   alt="logo"
                 />
               </span>
