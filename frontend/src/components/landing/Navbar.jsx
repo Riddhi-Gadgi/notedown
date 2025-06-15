@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, PencilLine } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,7 +8,9 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between items-center px-6 py-2 bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
       <div className="flex items-center">
-        <img className="mr-2" src="/note-down-logo.svg" width="40" alt="Logo" />
+        <div className="w-10 h-10 bg-black rounded-md flex items-center justify-center mr-3">
+          <PencilLine className="w-7 h-7 text-white" />
+        </div>
 
         <h1 className="text-black font-bold text-2xl">Note Down</h1>
       </div>

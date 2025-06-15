@@ -420,15 +420,7 @@ const Notes = () => {
       <div className="bg-white border-b border-gray-200 p-6 sticky top-0 z-20 transition-colors duration-300 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold text-gray-900">Notes</h1>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={createNewNote}
-            className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors shadow hover:shadow-md"
-          >
-            <Plus className="w-4 h-4" />
-            New Note
-          </motion.button>
+          {/* Removed New Note button from header */}
         </div>
 
         {/* Search and Filters */}
@@ -499,19 +491,41 @@ const Notes = () => {
         </AnimatePresence>
       </div>
 
-      {/* Notes Grid */}
-      <div className="flex-1 overflow-auto p-6 transition-colors duration-300">
+      {/* Notes Grid with Floating Action Button */}
+      <div className="flex-1 overflow-auto p-6 transition-colors duration-300 relative">
+        {/* Floating Action Button */}
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={createNewNote}
+            className="bg-black text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl"
+          >
+            <Plus className="w-5 h-5" />
+            <span className="font-medium">New Note</span>
+          </motion.button>
+        </div>
+
         {filteredNotes.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-400 text-lg mb-2">No notes found</div>
-            <p className="text-gray-500">
+            <p className="text-gray-500 mb-6">
               {searchQuery
                 ? "Try adjusting your search"
                 : "Create your first note to get started"}
             </p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={createNewNote}
+              className="bg-black text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors shadow hover:shadow-md mx-auto"
+            >
+              <Plus className="w-5 h-5" />
+              Create First Note
+            </motion.button>
           </div>
         ) : (
-          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
+          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4 pb-16">
             <AnimatePresence>
               {filteredNotes.map((note) => {
                 const noteCategory = getCategory(note);

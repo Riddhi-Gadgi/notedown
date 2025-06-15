@@ -1,5 +1,12 @@
 import { motion } from "framer-motion";
-import { FileText, Twitter, Github, Linkedin, Mail } from "lucide-react";
+import {
+  FileText,
+  PencilLine,
+  Twitter,
+  Github,
+  Linkedin,
+  Mail,
+} from "lucide-react";
 
 const Footer = () => {
   const footerLinks = {
@@ -49,8 +56,8 @@ const Footer = () => {
               viewport={{ once: true }}
               className="flex items-center mb-4"
             >
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-                <FileText className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 bg-black rounded-md flex items-center justify-center mr-3">
+                <PencilLine className="w-7 h-7 text-white" />
               </div>
               <span className="text-xl font-bold">Note Down</span>
             </motion.div>

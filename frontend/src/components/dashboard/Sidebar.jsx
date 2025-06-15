@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FileText, FolderOpen, Calendar, Brain, Menu, X } from "lucide-react";
+import { PencilLine, FileText, FolderOpen, Calendar, Brain, Menu, X } from "lucide-react";
 
 const username = "User";
 
@@ -44,11 +44,9 @@ const Sidebar = () => {
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
               <span>
-                <img
-                  src="../src/assets/note-down-logo.svg"
-                  width="41px"
-                  alt="logo"
-                />
+                <div className="w-10 h-10 bg-black rounded-md flex items-center justify-center mr-3">
+                  <PencilLine className="w-7 h-7 text-white" />
+                </div>
               </span>
             </div>
             {!collapsed && (
